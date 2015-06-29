@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "score-viewer",
+  "version": "0.0.3",
+  "description": "view musicxml score in browser",
+  "permissions": ["tabs"],
+  "browser_action": {
+  
+  	"default_icon": "images/score-viewer.png",
+  	"default_title": "score viewer",
+  	"default_popup": "popup.html"  
+  }
+}
