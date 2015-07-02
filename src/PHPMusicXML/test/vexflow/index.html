@@ -8,7 +8,6 @@
     <script src="vexflow-debug.js"></script>
 
     <script>
-      // source: http://stackoverflow.com/a/901144
       function getParameter(name) {
         name = name.replace(/\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
@@ -16,7 +15,6 @@
         if (results == null) return undefined;
         else return decodeURIComponent(results[1].replace(/\+/g, " "));
       }
-
       var doc = null;
       $(document).ready(function() {
         var req = new XMLHttpRequest();

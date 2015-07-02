@@ -13,13 +13,14 @@ class Part {
 	}
 
 	function toXML() {
-		$out = '';
+		$out = '<part>';
 
 		if (!empty($this->measures)) {
 			foreach ($this->measures as $key => $measure) {
 				$out .= $measure->toXML($key);
 			}
 		}
+		$out .= '</part>';
 
 		return $out;
 	}

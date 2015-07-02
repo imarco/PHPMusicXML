@@ -6,6 +6,8 @@ require_once('classes/Measure.php');
 require_once('classes/Note.php');
 require_once('classes/Direction.php');
 require_once('classes/Part.php');
+require_once('classes/Pitch.php');
+require_once('classes/Layer.php');
 
 
 class PHPMusicXML {

@@ -2,8 +2,8 @@
 
 class Measure {
 
-	var $notes = array();
 	var $attributes = array();
+	var $layers = array();
 
 	function __construct($attributes = array()) {
 		$this->attributes = $attributes;
@@ -22,9 +22,14 @@ class Measure {
 		$out .= $this->_renderAttributes();
 		$out .= '</attributes>';
 
-		foreach ($this->notes as $note) {
-			$out .= $note->toXML();
+		foreach ($this->layers as $layer) {
+			$out .= $layer->toXML();
 		}
+
+		$ticks = $this->attributes['divisions'] * $this->attributes['time']['beats'];
+		$out .= '<backup>';
+    	$out .= '<duration>'.$ticks.'</duration>';
+  		$out .= '</backup>';
 
 		$out .= '</measure>';
 		return $out;
@@ -34,6 +39,7 @@ class Measure {
 		$out = '';
 
 		$out .= '<divisions>'.$this->attributes['divisions'].'</divisions>';
+		$staves = 1;
 
 		if (isset($this->attributes['key'])) {
 			$out .= '<key>';
@@ -62,26 +68,42 @@ class Measure {
 		}
 
 		if (isset($this->attributes['clef'])) {
-			$out .= '<clef>';
-			if (isset($this->attributes['clef']['sign'])) {
-				$out .= '<sign>' . $this->attributes['clef']['sign'] . '</sign>';
+			if (!is_array($this->attributes['clef'])) {
+				$this->attributes['clef'] = array($this->attributes['clef']);
 			}
-			if (isset($this->attributes['clef']['line'])) {
-				$out .= '<line>' . $this->attributes['clef']['line'] . '</line>';
+			$num = 0;
+			foreach ($this->attributes['clef'] as $clef) {
+				$num++;
+				$out .= '<clef number="' . $num . '">';
+				if (isset($clef['sign'])) {
+					$out .= '<sign>' . $clef['sign'] . '</sign>';
+				}
+				if (isset($clef['line'])) {
+					$out .= '<line>' . $clef['line'] . '</line>';
+				}
+				$out .= '</clef>';
 			}
-			$out .= '</clef>';
+			$staves = $num;
 		}
 
+		if (isset($this->attributes['staves'])) {
+			$staves = $this->attributes['staves'];
+		}
+		$out .= '<staves>'.$staves.'</staves>';
 		return $out;
 	}
 
-	function addNote($note) {
-		$this->notes[] = $note;
+	function addLayer($layer) {
+		$this->layers[] = $layer;
 	}
 
-	function clear() {
-		$this->notes[] = array();
-	}
+	// function addNote($note) {
+	// 	$this->notes[] = $note;
+	// }
+
+	// function clear() {
+	// 	$this->notes[] = array();
+	// }
 
 	function backup($duration) {
 
