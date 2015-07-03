@@ -10,8 +10,8 @@ class Note {
 		$this->attributes = $attributes;
 	}
 
-	function setAttribute($attribute) {
-
+	function setAttribute($attribute, $value) {
+		$this->attributes[$attribute] = $value;
 	}
 
 	function toXML() {

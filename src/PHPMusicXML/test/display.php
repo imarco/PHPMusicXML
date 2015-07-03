@@ -63,7 +63,11 @@ $measureOptions = array(
 );
 
 
-$pitches = array('C4','C#4','D4','E-4','E4','F4','F#4','F##4','G4','A4','B4');
+$pitches = array(
+	array('C4','E4','G4'),
+	array('C4','F4','A4'),
+	'F4','F#4','F##4','G4','A4','B4'
+);
 
 
 $score = new Score();
@@ -72,14 +76,29 @@ $measure = new Measure($measureOptions);
 $layer = new Layer();
 
 foreach ($pitches as $pitch) {
-	$note = new Note(
-		array(
-			'pitch' => $pitch,
-			'duration' => 4,
-			'type' => 'quarter'
-		)
-	);
-	$layer->addNote($note);
+	if (is_array($pitch)) {
+		$chord = new Chord();
+		foreach($pitch as $p) {
+			$note = new Note(
+				array(
+					'pitch' => $p,
+					'duration' => 4,
+					'type' => 'quarter'
+				)
+			);
+			$chord->addNote($note);
+		}
+		$layer->addChord($chord);
+	} else {
+		$note = new Note(
+			array(
+				'pitch' => $pitch,
+				'duration' => 4,
+				'type' => 'quarter'
+			)
+		);		
+		$layer->addNote($note); // this essentially adds a chord with only one note in it.
+	}
 }
 $measure->addLayer($layer);
 $part->addMeasure($measure);
@@ -88,39 +107,40 @@ $part->addMeasure($measure);
 
 
 $measure = new Measure($measureOptions);
-$layer = new Layer();
-foreach ($pitches as $pitch) {
-	$note = new Note(
-		array(
-			'pitch' => $pitch,
-			'duration' => 4,
-			'type' => 'quarter',
-			'staff' => 1,
-			'voice' => 1,
-			'stem' => 'up'
-		)
-	);
-	$layer->addNote($note);
-}
-$measure->addLayer($layer);
 
 $layer = new Layer();
 foreach ($pitches as $pitch) {
 
-	$pitch = new Pitch($pitch);
-	$pitch->transpose(-12);
+	if (is_array($pitch)) {
+		$chord = new Chord();
+		foreach($pitch as $p) {
 
-	$note = new Note(
-		array(
-			'pitch' => $pitch,
-			'duration' => 4,
-			'type' => 'quarter',
-			'staff' => 2,
-			'voice' => 2,
-			'stem' => 'down'
-		)
-	);
-	$layer->addNote($note);
+			$pitch = new Pitch($p);
+			$pitch->transpose(-12);
+
+			$note = new Note(
+				array(
+					'pitch' => $p,
+					'duration' => 4,
+					'type' => 'quarter'
+				)
+			);
+			$chord->addNote($note);
+		}
+		$layer->addChord($chord);
+	} else {
+		$pitch = new Pitch($pitch);
+		$pitch->transpose(-12);
+
+		$note = new Note(
+			array(
+				'pitch' => $pitch,
+				'duration' => 4,
+				'type' => 'quarter'
+			)
+		);		
+		$layer->addNote($note);
+	}
 }
 $measure->addLayer($layer);
 

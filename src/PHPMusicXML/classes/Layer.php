@@ -1,25 +1,30 @@
 <?php
 
-
 class Layer {
 	
-	public $notes = array();
+	public $chords = array();
 
 	public function __construct() {
 	}
 
 	function addNote($note) {
-		$this->notes[] = $note;
+		$chord = new Chord();
+		$chord->addNote($note);
+		$this->addChord($chord);
+	}
+
+	function addChord($chord) {
+		$this->chords[] = $chord;
 	}
 
 	function clear() {
-		$this->notes[] = array();
+		$this->chords[] = array();
 	}
 
 	function toXML() {
 		$out = '';
-		foreach($this->notes as $note) {
-			$out .= $note->toXML();
+		foreach($this->chords as $chord) {
+			$out .= $chord->toXML();
 		}
 		return $out;
 	}

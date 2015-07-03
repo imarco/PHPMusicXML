@@ -25,6 +25,7 @@ class Pitch {
 	}
 
 	private function _resolvePitchString($pitch) {
+print_r($pitch);
 
 		if (is_array($pitch)) {
 			$this->step = $pitch['step'];
