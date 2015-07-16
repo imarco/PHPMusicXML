@@ -12,48 +12,44 @@ ini_set('display_errors', 1);
 
 require_once '../PHPMusicXML.php';
 
-$divisions = 24; // we'll say we can divide the beats into 24 parts;
-$beats = 4; // we'll say we can divide the beats into 24 parts;
-$ticks = $divisions * $beats;
-
 $measureOptions = array(
 	'divisions' => 4,
-	'key' => array(
-		'fifths' => 3,
-		'mode' => 'major'
-	),
+	'key' => new Key('D major'),
 	'time' => array(
 		'symbol' => 'common', // omit this to represent a normal signature
 		'beats' => 4,
 		'beat-type' => 4
 	),
 	'clef' => array(
-		array(
-			'sign' => 'G',
-			'line' => 2
-		),
-		array(
-			'sign' => 'F',
-			'line' => 4
-		),
+		new Clef('treble'),
+		new Clef('bass')
 	),
 	'barline' => array(
-		array(
-			'location' => 'left',
-			'bar-style' => 'light-heavy',
-			'repeat' => 'forward',
-			'ending' => array(
-				'type' => 'stop',
-				'number' => 1
+		new Barline(
+			array(
+				'location' => 'left',
+				'bar-style' => 'light-heavy',
+				'repeat' => array(
+					'direction' => 'forward',
+					'winged' => 'none'
+				),
+				'ending' => array(
+					'type' => 'stop',
+					'number' => 1
+				)
 			)
 		),
-		array(
-			'location' => 'right',
-			'bar-style' => 'heavy-light',
-			'repeat' => 'backward',
-			'ending' => array(
-				'type' => 'stop',
-				'number' => 1
+		new Barline(
+			array(
+				'location' => 'right',
+				'bar-style' => 'heavy-light',
+				'repeat' => array(
+					'direction' => 'backward'
+				),
+				'ending' => array(
+					'type' => 'stop',
+					'number' => 2
+				)
 			)
 		)
 	),
@@ -66,7 +62,7 @@ $measureOptions = array(
 $pitches = array(
 	array('C4','E4','G4'),
 	array('C4','F4','A4'),
-	'F4','F#4','F##4','G4','A4','B4'
+	'F4','F#4','F##4','G4','A-4','B4'
 );
 
 
@@ -78,7 +74,7 @@ $layer = new Layer();
 foreach ($pitches as $pitch) {
 	if (is_array($pitch)) {
 		$chord = new Chord();
-		foreach($pitch as $p) {
+		foreach ($pitch as $p) {
 			$note = new Note(
 				array(
 					'pitch' => $p,
@@ -103,17 +99,17 @@ foreach ($pitches as $pitch) {
 $measure->addLayer($layer);
 $part->addMeasure($measure);
 
-// 2nd measure
 
+
+// 2nd measure
 
 $measure = new Measure($measureOptions);
 
 $layer = new Layer();
 foreach ($pitches as $pitch) {
-
 	if (is_array($pitch)) {
 		$chord = new Chord();
-		foreach($pitch as $p) {
+		foreach ($pitch as $p) {
 
 			$pitch = new Pitch($p);
 			$pitch->transpose(-12);
@@ -143,6 +139,53 @@ foreach ($pitches as $pitch) {
 	}
 }
 $measure->addLayer($layer);
+
+$part->addMeasure($measure);
+
+// 3nd measure
+
+$measure = new Measure($measureOptions);
+
+$layer = new Layer();
+$note = new Note(
+	array(
+		'pitch' => new Pitch('F2'),
+		'duration' => 8,
+		'type' => 'half'
+	)
+);		
+$layer->addNote($note);
+$note = new Note(
+	array(
+		'pitch' => new Pitch('G2'),
+		'duration' => 8,
+		'type' => 'half'
+	)
+);		
+$layer->addNote($note);
+
+$measure->addLayer($layer);
+
+$layer = new Layer();
+$note = new Note(
+	array(
+		'pitch' => new Pitch('G3'),
+		'duration' => 8,
+		'type' => 'half'
+	)
+);		
+$layer->addNote($note);
+$note = new Note(
+	array(
+		'pitch' => new Pitch('C#3'),
+		'duration' => 8,
+		'type' => 'half'
+	)
+);		
+$layer->addNote($note);
+
+$measure->addLayer($layer);
+
 
 $part->addMeasure($measure);
 

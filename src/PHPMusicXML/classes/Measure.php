@@ -2,15 +2,15 @@
 
 class Measure {
 
-	var $attributes = array();
+	var $properties = array();
 	var $layers = array();
 
-	function __construct($attributes = array()) {
-		$this->attributes = $attributes;
+	function __construct($properties = array()) {
+		$this->properties = $properties;
 	}
 
-	function setAttribute($attribute) {
-
+	function setProperty($name, $value) {
+		$this->properties[$name] = $value;
 	}
 
 	function toXML($number) {
@@ -19,91 +19,91 @@ class Measure {
 		$out .= '<measure number="' . $number . '">';
 
 		$out .= '<attributes>';
-		$out .= $this->_renderAttributes();
+		$out .= $this->_renderproperties();
 		$out .= '</attributes>';
 
+		$ticks = $this->properties['divisions'] * $this->properties['time']['beats'];
+
+		$i = 0;
 		foreach ($this->layers as $layer) {
 			$out .= $layer->toXML();
+			$i++;
+
+			if ($i < count($this->layers)) {
+				$out .= '<backup>';
+		    	$out .= '<duration>'.$ticks.'</duration>';
+		  		$out .= '</backup>';
+				$out .= '<forward>';
+		    	$out .= '<duration>0</duration>';
+		  		$out .= '</forward>';
+			}
 		}
 
-		$ticks = $this->attributes['divisions'] * $this->attributes['time']['beats'];
-		$out .= '<backup>';
-    	$out .= '<duration>'.$ticks.'</duration>';
-  		$out .= '</backup>';
+		foreach ($this->properties['barline'] as $barline) {
+			$out .= $barline->toXML();
+		}
 
 		$out .= '</measure>';
 		return $out;
 	}
 
-	private function _renderAttributes() {
+	/**
+	 * renders the object's properties as XML
+	 * @return  string  the XML
+	 */
+	private function _renderproperties() {
 		$out = '';
 
-		$out .= '<divisions>'.$this->attributes['divisions'].'</divisions>';
+		$out .= '<divisions>'.$this->properties['divisions'].'</divisions>';
 		$staves = 1;
 
-		if (isset($this->attributes['key'])) {
-			$out .= '<key>';
-			if (isset($this->attributes['key']['fifths'])) {
-				$out .= '<fifths>' . $this->attributes['key']['fifths'] . '</fifths>';
-			}
-			if (isset($this->attributes['key']['mode'])) {
-				$out .= '<mode>' . $this->attributes['key']['mode'] . '</mode>';
-			}
-			$out .= '</key>';
+		if (isset($this->properties['key'])) {
+			$key = $this->properties['key'];
+			$out .= $key->toXML();
 		}
 
-		if (isset($this->attributes['time'])) {
+		if (isset($this->properties['time'])) {
 			$out .= '<time';
-			if (isset($this->attributes['time']['symbol'])) {
-				$out .= ' symbol="' . $this->attributes['time']['symbol'] . '"';
+			if (isset($this->properties['time']['symbol'])) {
+				$out .= ' symbol="' . $this->properties['time']['symbol'] . '"';
 			}
 			$out .= '>';
-			if (isset($this->attributes['time']['beats'])) {
-				$out .= '<beats>' . $this->attributes['time']['beats'] . '</beats>';
+			if (isset($this->properties['time']['beats'])) {
+				$out .= '<beats>' . $this->properties['time']['beats'] . '</beats>';
 			}
-			if (isset($this->attributes['time']['beat-type'])) {
-				$out .= '<beat-type>' . $this->attributes['time']['beat-type'] . '</beat-type>';
+			if (isset($this->properties['time']['beat-type'])) {
+				$out .= '<beat-type>' . $this->properties['time']['beat-type'] . '</beat-type>';
 			}
 			$out .= '</time>';
 		}
 
-		if (isset($this->attributes['clef'])) {
-			if (!is_array($this->attributes['clef'])) {
-				$this->attributes['clef'] = array($this->attributes['clef']);
+		$clefs = '';
+		if (isset($this->properties['clef'])) {
+			if (!is_array($this->properties['clef'])) {
+				$this->properties['clef'] = array($this->properties['clef']);
 			}
 			$num = 0;
-			foreach ($this->attributes['clef'] as $clef) {
+			foreach ($this->properties['clef'] as $clef) {
 				$num++;
-				$out .= '<clef number="' . $num . '">';
-				if (isset($clef['sign'])) {
-					$out .= '<sign>' . $clef['sign'] . '</sign>';
-				}
-				if (isset($clef['line'])) {
-					$out .= '<line>' . $clef['line'] . '</line>';
-				}
-				$out .= '</clef>';
+				$clefs .= $clef->toXML($num);
 			}
 			$staves = $num;
 		}
 
-		if (isset($this->attributes['staves'])) {
-			$staves = $this->attributes['staves'];
+		if (isset($this->properties['staves'])) {
+			$staves = $this->properties['staves'];
 		}
+
+		// output staves first, and then clefs.
 		$out .= '<staves>'.$staves.'</staves>';
+		$out .= $clefs;
+
 		return $out;
 	}
 
 	function addLayer($layer) {
 		$this->layers[] = $layer;
 	}
-
-	// function addNote($note) {
-	// 	$this->notes[] = $note;
-	// }
-
-	// function clear() {
-	// 	$this->notes[] = array();
-	// }
 
 	function backup($duration) {
 
@@ -113,10 +113,56 @@ class Measure {
 
 	}
 
-	public function transpose($interval) {
-		foreach ($this->notes as &$note) {
-			$note->transpose($interval);
+	/**
+	 * transposes all the notes in this measure by $interval
+	 * @param  integer  $interval  a signed integer telling how many semitones to transpose up or down
+	 * @param  integer  $preferredAlteration  either 1, or -1 to indicate whether the transposition should prefer sharps or flats.
+	 * @return  null     
+	 */
+	public function transpose($interval, $preferredAlteration) {
+		foreach ($this->layers as &$layer) {
+			$layer->transpose($interval);
 		}
+	}
+
+	/**
+	 * using the measure's own Key, will quantize all the notes to be part of a given scale.
+	 * If scale is omitted, will use the scale implied by the Key's "mode" property.
+	 * @param   $scale  a Scale object
+	 * @return null
+	 */
+	public function autoTune($scale = null) {
+
+		// todo: figure out the key and scale, based on the measure's Key property
+
+		foreach ($this->layers as &$layer) {
+			$layer->autoTune($scale);
+		}
+	}
+
+
+	/**
+	 * analyze the current measure, and return an array of all the Scales that its notes fit into.
+	 * @param  Pitch  $root  if the root is known and we only want to learn about matching modes, provide a Pitch for the root.
+	 * @return [type] [description]
+	 */
+	public function getScales($root = null) {
+		$scales = Scale::getScales($this);
+	}
+
+	/**
+	 * returns an array of Pitch objects, for every pitch of every note in the measure.
+	 * @param  boolean  $heightless  if true, will return heightless pitches all mudul to the same octave. Useful for
+	 *                              analysis, determining mode etc.
+	 * @return array  an array of Pitch objects
+	 */
+	public function getAllPitches($heightless = false) {
+		$pitches = array();
+		foreach ($this->layers as $layer) {
+			$layerPitches = $layer->getAllPitches($heightless);
+			$pitches = array_merge_recursive($pitches, $layerPitches);
+		}
+		return $pitches;
 	}
 
 }

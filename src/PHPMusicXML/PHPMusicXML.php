@@ -9,6 +9,9 @@ require_once('classes/Part.php');
 require_once('classes/Pitch.php');
 require_once('classes/Layer.php');
 require_once('classes/Chord.php');
+require_once('classes/Key.php');
+require_once('classes/Clef.php');
+require_once('classes/Barline.php');
 
 
 class PHPMusicXML {

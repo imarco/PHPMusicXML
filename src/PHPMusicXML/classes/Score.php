@@ -2,14 +2,14 @@
 
 class Score {
 
-	public $attributes = array();
+	public $properties = array();
 	public $parts = array();
 
-	function __construct($attributes = array()) {
-		$this->attributes = $attributes;
+	function __construct($properties = array()) {
+		$this->properties = $properties;
 	}
 
-	function setAttribute($attribute) {
+	function setAttribute($property) {
 
 	}
 

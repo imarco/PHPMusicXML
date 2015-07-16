@@ -2,14 +2,9 @@
 
 class Part {
 
-	var $attributes = array();
 	var $measures = array();
 
-	function __construct($attributes = array()) {
-	}
-
-	function setAttribute($attribute) {
-
+	function __construct() {
 	}
 
 	function toXML() {

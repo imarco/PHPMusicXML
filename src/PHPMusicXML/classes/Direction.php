@@ -2,11 +2,13 @@
 
 class Direction {
 
-	function __construct($attributes = array()) {
+	public $properties = array();
+
+	function __construct($properties = array()) {
 	}
 
-	function setAttribute($attribute) {
-
+	function setProperty($name, $value) {
+		$this->properties[$name] = $value;
 	}
 
 	function toXML() {

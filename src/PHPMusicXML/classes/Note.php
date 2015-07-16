@@ -4,91 +4,108 @@ class Note {
 
 	public $notations = array();
 	public $articulations = array();
-	public $attributes = array();
+	public $properties = array();
 
-	function __construct($attributes = array()) {
-		$this->attributes = $attributes;
+	function __construct($properties = array()) {
+		// todo: cast the pitch as a Pitch immediately if it's constructed using a string like 'C4'
+		if (!$properties['pitch'] instanceof Pitch) {
+			$properties['pitch'] = new Pitch($properties['pitch']);
+		}
+		
+		$this->properties = $properties;
 	}
 
-	function setAttribute($attribute, $value) {
-		$this->attributes[$attribute] = $value;
+	function setProperty($attribute, $value) {
+		$this->properties[$attribute] = $value;
+	}
+
+	/**
+	 * transposes the Pitch of a Note up or down by $interval semitones
+	 * @param  integer  $interval  a signed integer telling how many semitones to transpose up or down
+	 * @param  integer  $preferredAlteration  either 1, or -1 to indicate whether the transposition should prefer sharps or flats.
+	 * @return  null     
+	 */
+	function transpose($interval, $preferredAlteration = 1) {
+		$pitch = $this->properties['pitch'];
+		$pitch->transpose($interval, $preferredAlteration = 1);
+		$this->properties['pitch'] = $pitch;
 	}
 
 	function toXML() {
 		$out = '';
 
 		$out .= '<note';
-		if (isset($this->attributes['default-x'])) {
-			$out .= ' default-x="' . $this->attributes['default-x'] . '"';
+		if (isset($this->properties['default-x'])) {
+			$out .= ' default-x="' . $this->properties['default-x'] . '"';
 		}
-		if (isset($this->attributes['default-y'])) {
-			$out .= ' default-y="' . $this->attributes['default-y'] . '"';
+		if (isset($this->properties['default-y'])) {
+			$out .= ' default-y="' . $this->properties['default-y'] . '"';
 		}
 		$out .= '>';
 
-		if (!empty($this->attributes['rest'])) {
+		if (!empty($this->properties['rest'])) {
 			$out .= '<rest/>';
 		}
 
-		if (!empty($this->attributes['chord'])) {
+		if (!empty($this->properties['chord'])) {
 			$out .= '<chord/>';
 		}
 
-		if (!empty($this->attributes['pitch'])) {
-			if ($this->attributes['pitch'] instanceof Pitch) {
-				$pitch = $this->attributes['pitch'];
+		if (!empty($this->properties['pitch'])) {
+			if ($this->properties['pitch'] instanceof Pitch) {
+				$pitch = $this->properties['pitch'];
 			} else {
 				// we'll presume it's a string then
-				$pitch = new Pitch($this->attributes['pitch']);
+				$pitch = new Pitch($this->properties['pitch']);
 			}
 			$out .= $pitch->toXML();
 		}
 
-		if (!empty($this->attributes['duration'])) {
-			$out .= '<duration>' . $this->attributes['duration'] . '</duration>';
+		if (!empty($this->properties['duration'])) {
+			$out .= '<duration>' . $this->properties['duration'] . '</duration>';
 		}
-		if (!empty($this->attributes['voice'])) {
-			$out .= '<voice>' . $this->attributes['voice'] . '</voice>';
+		if (!empty($this->properties['voice'])) {
+			$out .= '<voice>' . $this->properties['voice'] . '</voice>';
 		}
-		if (!empty($this->attributes['type'])) {
-			$out .= '<type>' . $this->attributes['type'] . '</type>';
+		if (!empty($this->properties['type'])) {
+			$out .= '<type>' . $this->properties['type'] . '</type>';
 		}
-		if (!empty($this->attributes['dot'])) {
+		if (!empty($this->properties['dot'])) {
 			$out .= '<dot/>';
 		}
 
-		if (!empty($this->attributes['tie'])) {
-			$out .= '<tie style="' . $this->attributes['tie'] . '">';
-			$this->notations['tie'] = $this->attributes['tie'];
+		if (!empty($this->properties['tie'])) {
+			$out .= '<tie style="' . $this->properties['tie'] . '">';
+			$this->notations['tie'] = $this->properties['tie'];
 		}
 
-		if (!empty($this->attributes['staccato'])) {
-			$this->notations['staccato'] = $this->attributes['staccato'];
+		if (!empty($this->properties['staccato'])) {
+			$this->notations['staccato'] = $this->properties['staccato'];
 		}
 
-		if (!empty($this->attributes['stem'])) {
+		if (!empty($this->properties['stem'])) {
 			$out .= '<stem';
-			if (isset($this->attributes['stem']['default-x'])) {
-				$out .= ' default-x="' . $this->attributes['stem']['default-x'] . '"';
+			if (isset($this->properties['stem']['default-x'])) {
+				$out .= ' default-x="' . $this->properties['stem']['default-x'] . '"';
 			}
-			if (isset($this->attributes['stem']['default-y'])) {
-				$out .= ' default-y="' . $this->attributes['stem']['default-y'] . '"';
+			if (isset($this->properties['stem']['default-y'])) {
+				$out .= ' default-y="' . $this->properties['stem']['default-y'] . '"';
 			}
 			$out .= '>';
-			if (isset($this->attributes['stem']['direction'])) {
-				$out .= $this->attributes['stem']['direction'];
+			if (isset($this->properties['stem']['direction'])) {
+				$out .= $this->properties['stem']['direction'];
 			}
 			$out .= '</stem>';
 		}
-		if (!empty($this->attributes['staff'])) {
-			$out .= '<staff>' . $this->attributes['staff'] . '</staff>';
+		if (!empty($this->properties['staff'])) {
+			$out .= '<staff>' . $this->properties['staff'] . '</staff>';
 		}
 
-		if (!empty($this->attributes['beam'])) {
-			if (!is_array($this->attributes['beam'])) {
-				$this->attributes['beam'] = array($this->attributes['beam']);
+		if (!empty($this->properties['beam'])) {
+			if (!is_array($this->properties['beam'])) {
+				$this->properties['beam'] = array($this->properties['beam']);
 			}
-			foreach ($this->attributes['beam'] as $beam) {
+			foreach ($this->properties['beam'] as $beam) {
 				$out .= '<beam';
 				if (isset($beam['beam']['number'])) {
 					$out .= ' number="' . $beam['beam']['number'] . '"';
