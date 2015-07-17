@@ -53,7 +53,8 @@ $measureOptions = array(
 			)
 		)
 	),
-	'implicit' => true,
+	'implicit' => false,
+	'non-controlling' => false,
 	'number' => 1,
 	'width' => 180
 );

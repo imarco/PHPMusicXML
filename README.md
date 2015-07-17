@@ -142,7 +142,10 @@ A measure has many properties:
 	</dd>
 
 	<dt>implicit</dt>
-	<dd>?</dd>
+	<dd>boolean. Defaults to false if omitted. If true, then the measure won't be counted with a measure number, as in pickup measures and the last half of mid-measure repeats.</dd>
+
+	<dt>non-controlling</dt>
+	<dd>boolean, defaults to false. If true, the left barline of this measure does not coincide with the left barline of measures in other parts.</dd>
 
 	<dt>width</dt>
 	<dd>to explicitly set the width of a measure</dd>

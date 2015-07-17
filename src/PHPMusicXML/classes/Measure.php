@@ -16,7 +16,15 @@ class Measure {
 	function toXML($number) {
 		$out = '';
 
-		$out .= '<measure number="' . $number . '">';
+		$out .= '<measure ';
+		if (isset($this->properties['implicit'])) {
+			$out .= ' implicit="' . ($this->properties['implicit'] ? 'yes' : 'no') . '"';
+		}
+		if (isset($this->properties['non-controlling'])) {
+			$out .= ' non-controlling="' . ($this->properties['non-controlling'] ? 'yes' : 'no') . '"';
+		}
+		$out .= 'number="' . $number . '"';
+		$out .= '>';
 
 		$out .= '<attributes>';
 		$out .= $this->_renderproperties();
