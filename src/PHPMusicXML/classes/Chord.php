@@ -17,6 +17,18 @@ class Chord {
 	}
 
 	/**
+	 * force deep cloning, so a clone of the measure will contain a clone of all its sub-objects as well
+	 * @return [type] [description]
+	 */
+	public function __clone() {
+	    foreach($this as $key => $val) {
+	        if (is_object($val) || (is_array($val))) {
+	            $this->{$key} = unserialize(serialize($val));
+	        }
+	    }
+	}
+
+	/**
 	 * transposes all the notes in this chord by $interval
 	 * @param  integer  $interval  a signed integer telling how many semitones to transpose up or down
 	 * @param  integer  $preferredAlteration  either 1, or -1 to indicate whether the transposition should prefer sharps or flats.

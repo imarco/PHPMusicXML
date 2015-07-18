@@ -75,7 +75,7 @@ $note->transpose(5, -1); // transpose up 5 semitones, preferring flats.
 A chord is a group of notes that sound simultaneously. 
 
 ```php
-$chord = new Chord($note1, $note2, $note3);
+$chord = new Chord(array($note1, $note2, $note3));
 $chord->addNote($note4);
 ```
 

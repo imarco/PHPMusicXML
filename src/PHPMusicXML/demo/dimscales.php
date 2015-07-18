@@ -20,9 +20,9 @@ $measureOptions = array(
 	'divisions' => 4,
 	'key' => new Key('C major'),
 	'time' => array(
-		'symbol' => 'common', // omit this to represent a normal signature
-		'beats' => 4,
-		'beat-type' => 4
+//		'symbol' => 'common', // omit this to represent a normal signature
+		'beats' => 6,
+		'beat-type' => 8
 	),
 	'clef' => array(
 		new Clef('treble'),
@@ -86,8 +86,12 @@ foreach ($pitches as $pitch) {
 
 $measure->addLayer($layer);
 
-$layer->transpose(-12);
-$measure->addLayer($layer);
+$newlayer = clone $layer;
+$newlayer->transpose(-12);
+$measure->addLayer($newlayer);
+
+// puts this layer in staff two
+$newlayer->setStaff(2);
 
 
 for($i=0; $i<12; $i++) {
