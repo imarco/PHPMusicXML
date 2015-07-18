@@ -10,6 +10,10 @@ A library for generating and outputting MusicXML using PHP
   
 This project is very much a work in progress. Features described here may not exist or may not work, and there may be features that work that aren't documented here yet. This is a public, open-source project so if you see something that isn't right, be a hero: fork it and fix it!
 
+
+![Parts of MusicXML](https://raw.githubusercontent.com/ianring/PHPMusicXML/master/src/PHPMusicXML/demo/figure01.png)
+
+
 # Classes
 
 ## Pitch
