@@ -8,7 +8,7 @@ A library for generating and outputting MusicXML using PHP
  - https://en.wikipedia.org/wiki/MusicXML
  - https://www.soundslice.com/musicxml-viewer/
   
-
+This project is very much a work in progress. Features described here may not exist or may not work, and there may be features that work that aren't documented here yet. This is a public, open-source project so if you see something that isn't right, be a hero: fork it and fix it!
 
 # Classes
 
@@ -88,7 +88,7 @@ $chord->transpose(5, -1); // transpose up 5 semitones, preferring flats.
 
 ## Layer
 
-A layer allows multiple sequences of chords to share a single staff. This is common for notation of counterpoint, and for polyphonic instruments like the piano. Layers have no special properties of their own.
+A layer allows multiple sequences of chords to share a single measure. This is common for notation of counterpoint, and for polyphonic instruments like the piano. Layers have no special properties of their own.
 
 ```php
 $layer = new Layer();
@@ -170,7 +170,7 @@ $key->setProperty('mode', 'minor');
 $key->setProperty('fifths', 0);
 ```
 
-### Clefs
+### Clef
 
 There is a Clef class which provides a shorthand for creating common clefs. The clef has two properties: sign and line. 
 
@@ -203,7 +203,7 @@ $measure->setProperty('clef', array(
 $measure->setProperty('staves', 3);
 ```
 
-### Barlines
+### Barline
 
 The Barline class has four main properties: "location", "bar-style", "repeat", and "ending". "repeat" has sub-properties "direction" and "winged". "ending" has sub-properties "type" and "number".
 
@@ -227,6 +227,8 @@ $barline = new Barline(
 Barlines are added to a Measure by setting to the "barline" property.
 ```php
 $measure->setProperty('barline', $barline);
+$measure->setProperty('barline', array($barline1, $barline2));
+$measure->addBarline($barline);
 ```
 
 
