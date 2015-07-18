@@ -3,12 +3,14 @@
 class Part {
 
 	var $measures = array();
+	var $properties = array();
 
-	function __construct() {
+	function __construct($name) {
+		$this->properties['name'] = $name;
 	}
 
-	function toXML() {
-		$out = '<part>';
+	function toXML($num = 1) {
+		$out = '<part id="P' . $num . '">';
 
 		if (!empty($this->measures)) {
 			foreach ($this->measures as $key => $measure) {
@@ -21,7 +23,8 @@ class Part {
 	}
 
 	function addMeasure($measure) {
-		$this->measures[] = $measure;
+		$newmeasure = clone $measure;
+		$this->measures[] = $newmeasure;
 	}
 
 }

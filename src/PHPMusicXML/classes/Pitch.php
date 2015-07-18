@@ -64,8 +64,8 @@ class Pitch {
 		$out = '<pitch>';
 
 		$out .= '<step>' . $this->properties['step'] . '</step>';
-		$out .= '<octave>' . $this->properties['octave'] . '</octave>';
 		$out .= '<alter>' . $this->properties['alter'] . '</alter>';
+		$out .= '<octave>' . $this->properties['octave'] . '</octave>';
 
 		$out .= '</pitch>';
 

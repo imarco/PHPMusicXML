@@ -14,7 +14,7 @@ class Layer {
 	}
 
 	function addChord($chord) {
-		$this->chords[] = $chord;
+		$this->chords[] = clone $chord;
 	}
 
 	function clear() {

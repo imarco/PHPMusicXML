@@ -154,7 +154,7 @@ $note = new Note(
 		'duration' => 8,
 		'type' => 'half'
 	)
-);		
+);
 $layer->addNote($note);
 $note = new Note(
 	array(
@@ -162,7 +162,7 @@ $note = new Note(
 		'duration' => 8,
 		'type' => 'half'
 	)
-);		
+);
 $layer->addNote($note);
 
 $measure->addLayer($layer);
@@ -174,7 +174,7 @@ $note = new Note(
 		'duration' => 8,
 		'type' => 'half'
 	)
-);		
+);
 $layer->addNote($note);
 $note = new Note(
 	array(
@@ -182,7 +182,7 @@ $note = new Note(
 		'duration' => 8,
 		'type' => 'half'
 	)
-);		
+);
 $layer->addNote($note);
 
 $measure->addLayer($layer);
@@ -220,13 +220,20 @@ $xml2 = $score->toXML();
   </head>
   <body>
 
-  	<h3>Diminished Scale, all keys</h3>
+    <div id="viewer2">
+      <p>Please enable JavaScript to use the viewer.</p>
+    </div>
 
     <textarea style="width:800px;height:400px;">
     	<?php echo htmlspecialchars($xml2); ?>
     </textarea>
-    <div id="viewer2">
-      <p>Please enable JavaScript to use the viewer.</p>
-    </div>
+
+
+<pre>
+<?php 
+var_dump($score);
+?>
+</pre>
+
   </body>
 </html>

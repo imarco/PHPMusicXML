@@ -232,10 +232,10 @@ $measure->setProperty('barline', $barline);
 
 ## Part
 
-A part is a sequence of measures intended to be played by the same instrument. Parts don't have any special properties.
+A part is a sequence of measures intended to be played by the same instrument. Parts have one requied property, "name". The name is required by the constructor.
 
 ```php
-$part = new Part();
+$part = new Part('Pianoforte');
 $part->addMeasure($measure);
 ```
 

@@ -13,6 +13,18 @@ class Measure {
 		$this->properties[$name] = $value;
 	}
 
+	/**
+	 * force deep cloning, so a clone of the measure will contain a clone of all its sub-objects as well
+	 * @return [type] [description]
+	 */
+	public function __clone() {
+	    foreach($this as $key => $val) {
+	        if (is_object($val) || (is_array($val))) {
+	            $this->{$key} = unserialize(serialize($val));
+	        }
+	    }
+	}
+
 	function toXML($number) {
 		$out = '';
 
@@ -23,7 +35,7 @@ class Measure {
 		if (isset($this->properties['non-controlling'])) {
 			$out .= ' non-controlling="' . ($this->properties['non-controlling'] ? 'yes' : 'no') . '"';
 		}
-		$out .= 'number="' . $number . '"';
+		$out .= ' number="' . $number . '"';
 		$out .= '>';
 
 		$out .= '<attributes>';
@@ -127,7 +139,7 @@ class Measure {
 	 * @param  integer  $preferredAlteration  either 1, or -1 to indicate whether the transposition should prefer sharps or flats.
 	 * @return  null     
 	 */
-	public function transpose($interval, $preferredAlteration) {
+	public function transpose($interval, $preferredAlteration = 1) {
 		foreach ($this->layers as &$layer) {
 			$layer->transpose($interval);
 		}

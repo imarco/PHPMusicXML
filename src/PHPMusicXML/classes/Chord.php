@@ -33,7 +33,7 @@ class Chord {
 		if (!$note instanceof Note) {
 			$note = new Note($note);
 		}
-		$this->notes[] = $note;
+		$this->notes[] = clone $note;
 	}
 
 	function clear() {

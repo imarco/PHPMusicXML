@@ -28,6 +28,22 @@ class Barline {
 		if (isset($this->properties['bar-style'])) {
 			$out .= '<bar-style>' . $this->properties['bar-style'] . '</bar-style>';
 		}
+		if (isset($this->properties['footnote'])) {
+			$out .= '<footnote>' . $this->properties['footnote'] . '</footnote>';
+		}
+		if (isset($this->properties['ending'])) {
+			$out .= '<ending';
+			if (isset($this->properties['ending']['number'])) {
+				$out .= ' number="' . $this->properties['ending']['number'] . '"';
+			} else {
+				$out .= ' number="1"';
+			}
+			if (isset($this->properties['ending']['type'])) {
+				$out .= ' type="' . $this->properties['ending']['type'] . '"';
+			}
+			$out .= '>';
+			$out .= '</ending>';
+		}
 		if (isset($this->properties['repeat'])) {
 			$out .= '<repeat';
 			if (isset($this->properties['repeat']['direction'])) {
@@ -38,16 +54,7 @@ class Barline {
 			}
 			$out .= '></repeat>';
 		}
-		if (isset($this->properties['ending'])) {
-			$out .= '<ending>';
-			if (isset($this->properties['ending']['type'])) {
-				$out .= '<type>' . $this->properties['ending']['type'] . '</type>';
-			}
-			if (isset($this->properties['ending']['number'])) {
-				$out .= '<number>' . $this->properties['ending']['number'] . '</number>';
-			}
-			$out .= '</ending>';
-		}
+
 		$out .= '</barline>';
 		return $out;
 

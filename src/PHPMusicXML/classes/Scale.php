@@ -4,7 +4,7 @@ class Scale {
 
 	public $properties = array();
 
-	public $modes = array(
+	public static $modes = array(
 		'major' => 						array(0, 2, 4, 5, 7, 9, 11),
 		'minor' => 						'natural minor', //  alias
 		'minor harmonic' => 			array(0, 2, 3, 5, 7, 8, 11),
@@ -39,7 +39,9 @@ class Scale {
 			}
 
 			$this->properties['mode'] = $scale['mode'];
-			$this->properties['direction'] = $scale['direction'];
+			if (!empty($scale['direction'])) {
+				$this->properties['direction'] = $scale['direction'];
+			}
 		} else {
 			$this->_resolveScaleString($scale);
 		}
@@ -49,8 +51,17 @@ class Scale {
 		$this->properties[$name] = $value;
 	}
 
-	function getScale($name, $root, $direction) {
-		// todo.
+	// gets pitches in sequence for the scale
+	// todo: make this better
+	function getPitches() {
+		$root = $this->properties['root'];
+		$pitches = array();
+		foreach (self::$modes[$this->properties['mode']] as $interval) {
+			$newroot = clone $root;
+			$newroot->transpose($interval);
+			$pitches[] = $newroot;
+		}
+		return $pitches;
 	}
 
 	/**
