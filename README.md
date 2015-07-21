@@ -1,15 +1,47 @@
 # PHP-MusicXML
 A library for generating and outputting MusicXML using PHP
 
-# Resources
- - http://www.musicxml.com/tutorial/
- - http://www.musicxml.com/UserManuals/MusicXML/MusicXML.htm
- - https://github.com/0xfe/vexflow
- - https://en.wikipedia.org/wiki/MusicXML
- - https://www.soundslice.com/musicxml-viewer/
   
 This project is very much a work in progress. Features described here may not exist or may not work, and there may be features that work that aren't documented here yet. This is a public, open-source project so if you see something that isn't right, be a hero: fork it and fix it!
 
+
+# Basic Usage
+
+Create a file in your project named ```composer.json```, and put this in it:
+
+```
+{
+    "require": {
+        "ianring/PHPMusicXML": "dev-master"
+    }
+}
+```
+
+Then install composer, using this command:
+
+```
+curl -sS https://getcomposer.org/installer | php
+```
+
+Then execute this command:
+```
+php composer.phar install
+```
+
+Now you may use PHPMusicXML Classes in your project. For example:
+
+```php
+<?php
+use ianring\PHPMusicXML;
+require 'vendor/autoload.php';
+
+$score = new Score();
+// ... lots of things here
+echo $score->toXML();
+```
+
+
+# Parts of MusicXML
 
 ![Parts of MusicXML](https://raw.githubusercontent.com/ianring/PHPMusicXML/master/src/PHPMusicXML/demo/figure01.png)
 
@@ -162,7 +194,7 @@ The Key class builds a Key, to use as the 'key' property in your Measure. It is 
 
 The following two lines of code accomplish the same thing:
 ```php
-$key = new Key(array('fiths' => 3, 'mode' => 'major'));
+$key = new Key(array('fifths' => 3, 'mode' => 'major'));
 ```
 ```php
 $key = new Key('D major'));
@@ -292,3 +324,12 @@ $scale->setProperty('direction', -1);
 Scale objects are used for autoTune(), can be returned by functions that do analysis, and can be used to render sequences of Notes.
 
 
+
+
+# Resources
+ - http://www.musicxml.com/tutorial/
+ - http://www.musicxml.com/UserManuals/MusicXML/MusicXML.htm
+ - https://github.com/0xfe/vexflow
+ - https://en.wikipedia.org/wiki/MusicXML
+ - https://github.com/ringw/vexflow/
+ - https://www.soundslice.com/musicxml-viewer/

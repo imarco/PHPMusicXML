@@ -1,5 +1,5 @@
 {
-    "name": "ianring/phpmusicxml",
+    "name": "ianring/PHPMusicXML",
     "description": "A PHP library for manipulating and generating MusicXML",
     "keywords":["music","musicxml","php"],
     "type": "library",
