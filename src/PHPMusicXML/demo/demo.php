@@ -3,10 +3,7 @@ use ianring\PHPMusicXML;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-?>
-<h1>Demo</h1>
-<p>This script demonstrates the things that this library is capable of.</p>
-<?php
+
 //require_once SITE_ROOT . '/current/vendor/autoload.php';
 
 require_once '../PHPMusicXML.php';
@@ -227,8 +224,6 @@ $direction = new Direction(
 	)
 );
 
-
-
 $measure->addNote($note);
 
 $note = new Note(
@@ -259,17 +254,47 @@ $measure->addNote($note);
 // $measure->backup($duration);
 // $measure->forward($duration);
 
-$part = new Part();
+$part = new Part('Viola');
 $part->addMeasure($measure);
 
 $score->addPart($part);
 
-echo '<pre>';
-echo htmlspecialchars($score->toXML('partwise'));
-echo '</pre>';
+$xml2 = $score->toXML('partwise');
 
+?><html>
+<head>
+    <meta name="viewport" content="initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
 
+<script src="vexflow/jquery.js"></script>
+<script src="vexflow/vexflow-debug.js"></script>
 
-echo $score->toPNG();
+    <script>
+	$(document).ready(function() {
 
-echo $score->toPDF();
+		var xml2 = '<?php echo $xml2; ?>';
+		var doc = null;
+		doc = new Vex.Flow.Document(xml2);
+		doc.getFormatter().setWidth(800).draw($("#viewer2")[0]);
+
+	});
+
+    </script>
+    <style>
+      #viewer {
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="viewer2">
+      <p>Please enable JavaScript to use the viewer.</p>
+    </div>
+
+    <textarea style="width:800px;height:400px;">
+    	<?php echo htmlspecialchars($xml2); ?>
+    </textarea>
+
+  </body>
+</html>

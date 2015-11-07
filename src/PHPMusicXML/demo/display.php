@@ -3,13 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-?><html>
-<head>
-    <meta name="viewport" content="initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
-
-<?php
-
-
 require_once '../PHPMusicXML.php';
 
 $measureOptions = array(
@@ -196,7 +189,10 @@ $score->addPart($part);
 
 $xml2 = $score->toXML();
 
-?>
+?><html>
+<head>
+    <meta name="viewport" content="initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
+
 <script src="vexflow/jquery.js"></script>
 <script src="vexflow/vexflow-debug.js"></script>
 

@@ -8,10 +8,10 @@ class Note {
 
 	function __construct($properties = array()) {
 		// todo: cast the pitch as a Pitch immediately if it's constructed using a string like 'C4'
-		if (!$properties['pitch'] instanceof Pitch) {
+		if (isset($properties['pitch']) && !$properties['pitch'] instanceof Pitch) {
 			$properties['pitch'] = new Pitch($properties['pitch']);
 		}
-		
+
 		$this->properties = $properties;
 	}
 
@@ -20,7 +20,7 @@ class Note {
 	 * @return [type] [description]
 	 */
 	public function __clone() {
-	    foreach($this as $key => $val) {
+	    foreach ($this as $key => $val) {
 	        if (is_object($val) || (is_array($val))) {
 	            $this->{$key} = unserialize(serialize($val));
 	        }

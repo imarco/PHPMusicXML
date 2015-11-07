@@ -5,7 +5,7 @@ class Part {
 	var $measures = array();
 	var $properties = array();
 
-	function __construct($name) {
+	function __construct($name = null) {
 		$this->properties['name'] = $name;
 	}
 

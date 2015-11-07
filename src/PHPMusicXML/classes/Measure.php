@@ -60,6 +60,9 @@ class Measure {
 		}
 
 		foreach ($this->properties['barline'] as $barline) {
+			if (!$barline instanceof Barline) {
+				$barline = new Barline($barline);
+			}
 			$out .= $barline->toXML();
 		}
 
@@ -79,6 +82,9 @@ class Measure {
 
 		if (isset($this->properties['key'])) {
 			$key = $this->properties['key'];
+			if (!$key instanceof Key) {
+				$key = new Key($key);
+			}
 			$out .= $key->toXML();
 		}
 
@@ -105,6 +111,9 @@ class Measure {
 			$num = 0;
 			foreach ($this->properties['clef'] as $clef) {
 				$num++;
+				if (!$clef instanceof Clef) {
+					$clef = new Clef($clef);
+				}
 				$clefs .= $clef->toXML($num);
 			}
 			$staves = $num;
@@ -123,6 +132,21 @@ class Measure {
 
 	function addLayer($layer) {
 		$this->layers[] = $layer;
+	}
+
+	/**
+	 * adds a note to a measure. Assumes that it should be added to the first layer, and if there are no layers in
+	 * the measure one should be created. The note is enclosed in its own Chord object.
+	 * @param Note $note the note to add
+	 */
+	function addNote($note) {
+		if (!count($this->layers)) {
+			$layer = new Layer();
+			$this->addLayer($layer);
+		} else {
+			$layer = $this->layers[0];
+		}
+		$layer->addNote($note);
 	}
 
 	function backup($duration) {

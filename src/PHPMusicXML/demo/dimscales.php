@@ -134,12 +134,5 @@ $xml2 = $score->toXML();
 
 <textarea style="width:800px;height:400px;"><?php echo htmlspecialchars($xml2); ?></textarea>
 
-
-<pre>
-<?php 
-var_dump($score);
-?>
-</pre>
-
   </body>
 </html>
