@@ -82,8 +82,10 @@ $p->transpose(6, -1); // will create a G flat.
 
 In MusicXML, pitch is described using "step", "alter", and "octave", whereas in music analysis, pitch is often described using "chroma" and "height". Chroma is the chromatic position in the 12-tone scale, for which we have names like "C sharp". Whereas music notation cares about "step" and "alter" to know the difference between the visual representation of a B flat or A sharp, chroma doesn't carry information about notation, and can be represented as a number from 0 to 12.
 "Height" is the octave in which the chroma resides. Two pitches can have the same chroma in different heights (e.g. C#4 and C#5), and notes can of course have the same height and different chromas (e.g. D4 and F4).
-A Pitch might be "heightless", in which case it represents a Chroma with no "octave" property. Heightlessness is a useful concept in music analysis, because it allows you to examine the use of chromas without regard for their octave. Transposing a heightless pitch will result in another heightless pitch. Heightless pitches can be assigned to Notes (which would be a weird thing to do, but it is possible), but they can not be rendered as XML, so if you're mixing heightless pitches into music that is being rendered as XML, be careful.
-A heightless pitch may seem like a theoretical construct, but it is in fact possible to generate sounds that have chroma but no height. These are called "Shepard's Tones", and consist of layereed harmonics balanced in a way that makes the pitch perceptually heightless.
+
+### Heightless pitches
+A Pitch might be "heightless", when it represents a Chroma with no "octave" property. Heightlessness is a useful concept in music analysis, because it allows you to examine the use of chromas without regard for their octave. Transposing a heightless pitch will result in another heightless pitch. Heightless pitches can be assigned to Notes (which would be a weird thing to do, but it is possible), but they can not be rendered as XML, so if you're mixing heightless pitches into music that is being rendered as XML, be careful.
+A heightless pitch may seem like a theoretical construct, but it is in fact possible to generate sounds that have no perceptual height. These are called "Shepard's Tones", and consist of layered harmonics balanced in a way that makes the pitch perceptually heightless.
 
 
 ## Note

@@ -35,7 +35,7 @@ class Layer {
 
 	function toXML() {
 		$out = '';
-		foreach($this->chords as $chord) {
+		foreach ($this->chords as $chord) {
 			$out .= $chord->toXML();
 		}
 		return $out;

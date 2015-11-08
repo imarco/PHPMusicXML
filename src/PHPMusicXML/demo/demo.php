@@ -13,19 +13,6 @@ $score = new Score();
 $measure = new Measure(
 	array(
 		'divisions' => 24,
-		'key' => array(
-			'fifths' => 3,
-			'mode' => 'major'
-		),
-		'time' => array(
-			'symbol' => 'common', // omit this to represent a normal signature
-			'beats' => 4,
-			'beat-type' => 4
-		),
-		'clef' => array(
-			'sign' => 'G',
-			'line' => 2
-		),
 		'direction' => array(
 			'placement' => 'below',
 			'direction-type' => array(

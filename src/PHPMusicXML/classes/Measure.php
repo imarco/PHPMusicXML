@@ -7,6 +7,27 @@ class Measure {
 
 	function __construct($properties = array()) {
 		$this->properties = $properties;
+
+		// set defaults
+		if (empty($properties['time'])) {
+			$this->properties['time'] = array(
+				'symbol' => 'common',
+				'beats' => 4,
+				'beat-type' => 4
+			);
+		}
+		if (empty($this->properties['clef'])) {
+			$this->properties['clef'] = new Clef('treble');
+		}
+		if (empty($this->properties['key'])) {
+			$this->properties['key'] = new Key('C major');
+		}
+		if (empty($this->properties['divisions'])) {
+			$this->properties['divisions'] = 24;
+		}
+
+		// this line allows us to chain commands!
+		return $this;
 	}
 
 	function setProperty($name, $value) {
@@ -18,7 +39,7 @@ class Measure {
 	 * @return [type] [description]
 	 */
 	public function __clone() {
-	    foreach($this as $key => $val) {
+	    foreach ($this as $key => $val) {
 	        if (is_object($val) || (is_array($val))) {
 	            $this->{$key} = unserialize(serialize($val));
 	        }
@@ -59,11 +80,13 @@ class Measure {
 			}
 		}
 
-		foreach ($this->properties['barline'] as $barline) {
-			if (!$barline instanceof Barline) {
-				$barline = new Barline($barline);
+		if (!empty($this->properties['barline'])) {
+			foreach ($this->properties['barline'] as $barline) {
+				if (!$barline instanceof Barline) {
+					$barline = new Barline($barline);
+				}
+				$out .= $barline->toXML();
 			}
-			$out .= $barline->toXML();
 		}
 
 		$out .= '</measure>';
@@ -149,6 +172,16 @@ class Measure {
 		$layer->addNote($note);
 	}
 
+	/**
+	 * adds a  bunch of notes all at once.
+	 * @param array $array an array of Notes
+	 */
+	function addNotes($array) {
+		foreach($array as $note) {
+			$this->addNote($note);
+		}
+	}
+
 	function backup($duration) {
 
 	}
@@ -176,9 +209,7 @@ class Measure {
 	 * @return null
 	 */
 	public function autoTune($scale = null) {
-
 		// todo: figure out the key and scale, based on the measure's Key property
-
 		foreach ($this->layers as &$layer) {
 			$layer->autoTune($scale);
 		}
