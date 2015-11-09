@@ -39,12 +39,24 @@ class Scale {
 			}
 
 			$this->properties['mode'] = $scale['mode'];
-			if (!empty($scale['direction'])) {
-				$this->properties['direction'] = $scale['direction'];
-			}
 		} else {
 			$this->_resolveScaleString($scale);
 		}
+		if (empty($this->properties['direction'])) {
+			$this->properties['direction'] = 'ascending';
+		}
+
+	}
+
+	/**
+	 * accept a string, like "C# major ascending" or "D# minor",
+	 * "E4 aolian ascending" or "dorian"
+	 * leaving ambiguities intact to be filled in with setProperty
+	 * @param  [type] $string [description]
+	 * @return [type]         [description]
+	 */
+	function _resolveScaleString($string) {
+		// todo: this
 	}
 
 	/**
@@ -63,7 +75,7 @@ class Scale {
 		$this->properties[$name] = $value;
 	}
 
-	// gets pitches in sequence for the scale
+	// gets pitches in sequence for the scale, of one octave
 	// todo: make this better
 	function getPitches() {
 		$root = $this->properties['root'];
