@@ -1,25 +1,69 @@
 <?php
 ini_set('display_errors', true);
 error_reporting(E_ALL);
+
+$notecount_stats = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0);
+$imperfection_stats = array(
+	1 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	2 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	3 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	4 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	5 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	6 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	7 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	8 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	9 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	10 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	11 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	12 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+);
+$symmetry_stats = array(
+	1 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	2 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	3 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	4 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	5 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	6 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	7 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	8 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	9 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	10 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	11 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+	12 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
+);
+$symmetry_sets = array(
+	1 => array(),
+	2 => array(),
+	3 => array(),
+	4 => array(),
+	6 => array(),
+);
+
+
 ?>
 <html>
 <head>
 	<style>
 	.red {color:red;}
 	td{font-family: monospace;white-space: pre;}
+	body {
+		width:800px;
+		margin:0 auto;
+		font-family: helvetica;
+	}
 	</style>
 </head>
 <body>
-	<h1>All The Scales</h1>
+	<h1>Calculating Scales</h1>
 
 	<p>This exploration of scales is based on work by William Zeitler, as published at <a href="http://allthescales.org/">http://allthescales.org/</a>.</p>
 
-<p>The total number of all possible scales is the "power set" of the twelve-tone chromatic scale. The number of sets in a power set of size <em>n</em> is 2 ^ n.</p>
+<p>The total number of all possible scales is the "power set" of the twelve-tone chromatic scale. The number of sets in a power set of size <em>n</em> is (2^n).</p>
 <code>2 ^ 12 = 4096</code>
 <p>so there are 4096 different possible subsets of 12 tones.</p>
 
-<p>Thanks to the magic of binary math, we can represent these scales by a decimal number, from 0 to 4095. When represented as bits it reads from right to left - the lowest bit is the root, and each bit going from left to right ascends by one semitone.</p>
-<table border="1">
+<p>Thanks to the magic of binary math, we can represent these scales by a decimal number, from 0 to 4095. Converted to binary, 0 -> 000000000000 and 4095 -> 111111111111. When represented as bits it reads from right to left - the lowest bit is the root, and each bit going from right to left ascends by one semitone.</p>
+<table class="table" border="1">
 	<tr><th>decimal</th><th>binary</th><th></th></tr>
 	<tr>
 		<td>0</td>
@@ -116,7 +160,36 @@ $allscales = range(0, 4095);
 	</li>
 </ul>
 
-<h3>Modes</h3>
+<?php
+$howmany = array(1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0,10=>0,11=>0,12=>0);
+foreach ($allscales as $scale) {
+	$num = count($scale['tones']);
+	$howmany[$num]++;
+}
+?>
+<table class="table" border="1">
+	<thead>
+		<tr>
+			<th>number of tones</th>
+			<th>how many scales</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		foreach ($howmany as $i => $n) {
+			echo '<tr><td>' . $i . '</td><td>' . $n . '</td></tr>';
+		}
+		?>
+	</tbody>
+</table>
+
+
+
+<hr/>
+
+
+
+<h2>Modes</h2>
 <p>To compute a mode of the current scale, we shift all the notes down one semitone. If the result starts on the root tone (meaning, it is a scale), then it is a mode of the original scale.</p>
 <pre>
 <span class="red">1</span>01010110101 - major scale, "ionian" mode
@@ -136,42 +209,6 @@ $allscales = range(0, 4095);
 
 <?php
 // aggregate stats
-$notecount_stats = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0);
-$imperfection_stats = array(
-	1 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	2 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	3 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	4 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	5 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	6 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	7 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	8 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	9 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	10 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	11 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	12 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-);
-$symmetry_stats = array(
-	1 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	2 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	3 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	4 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	5 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	6 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	7 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	8 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	9 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	10 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	11 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-	12 => array(0=>0, 1=>0, 2=>0, 3=>0, 4=>0, 5=>0, 6=>0, 7=>0, 8=>0, 9=>0, 10=>0, 11=>0, 12=>0),
-);
-$symmetry_sets = array(
-	1 => array(),
-	2 => array(),
-	3 => array(),
-	4 => array(),
-	6 => array(),
-);
 
 foreach ($allscales as $index => $set) {
 	$note_count = count($set['tones']);
@@ -193,13 +230,79 @@ foreach ($allscales as $index => $set) {
 	}
 }
 
+$modelist = array(1=>array(),2=>array(),3=>array(),4=>array(),5=>array(),6=>array(),7=>array(),8=>array(),9=>array(),10=>array(),11=>array(),12=>array());
+$all = $allscales;
+while (count($all) > 0) {
+	$set = array_pop($all);
+	$modes = $set['modes'];
+	$notecount = count($set['tones']);
+	$modelist[$notecount][] = array_unique($modes);
+	foreach ($modes as $mode) {
+		unset($all[$mode]);
+	}
+}
+?>
+<h3>Modal Siblings</h3>
+<p>We can present the list of all modes grouped in sets of modal siblings</p>
+
+<table border="1">
+	<thead>
+		<tr>
+			<th>Number of tones in the scale</th>
+			<th>Number of modal families</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		foreach ($modelist as $num => $list) {
+			echo '<tr>';
+			echo '<td>'.$num.'</td>';
+			echo '<td>'.count($list).'</td>';
+			echo '</tr>';
+		}
+		?>
+	</tbody>
+</table>
+
+
+<?php
+foreach ($modelist as $num => $list) {
+	if (count($list) == 0) {
+		continue;
+	}
+	echo '<h4>'.$num.' tones</h4>';
+	echo '<table class="table" border="1">';
+	foreach ($list as $group) {
+		echo '<tr>';
+		echo '<td>';
+		foreach ($group as $mode) {
+			echo $mode;
+			$name = name($mode);
+			if (!empty($name)) {
+				echo ' (<b>'.$name.'</b>)';
+			}
+			echo ', ';
+		}
+		echo '</td>';
+		echo '</tr>';
+	}
+	echo '</table>';
+}
 ?>
 
-<h3>Symmetry</h3>
+
+
+
+<hr/>
+
+
+
+
+<h2>Symmetry</h2>
 
 <p>The set of 12 tones has 5 axes of symmetry. The twelve can be divided by 1, 2, 3, 4, and 6.</p>
 <p>Any scale containing symmetry can reproduce its own tones by transposition, and is also called a "mode of limited transposition" (Messaien)</p>
-<table border="1">
+<table class="table" border="1">
 	<tr><th>axes of symmetry</th><th>interval of repetition</th><th>scales</th></tr>
 	<tr>
 		<td>1,2,3,4,5,6,7,8,9,10,11</td>
@@ -233,8 +336,8 @@ foreach ($allscales as $index => $set) {
 		<!-- <td>0325, 0455, 0715, 0845, 0975, 1105, 1235, 1495, 1625, 1885, 2015, 2275, 2405, 2535, 2665, 2795, 3055, 3185, 3315, 3445, 3549, 3575, 3705, 3835, 3965</td> -->
 	</tr>
 </table>
-
-<table border="1"><thead><tr><th>number of notes in scale</th><th align="center" colspan="12"> Placement of Symmetries </th></tr>
+<br/>
+<table class="table" border="1"><thead><tr><th>number of notes in scale</th><th align="center" colspan="12"> Placement of Symmetries </th></tr>
   <tr>
  <?php
   	echo '<th></th>';
@@ -263,12 +366,18 @@ foreach ($allscales as $index => $set) {
 </table>
 
 
-<h3>Imperfection</h3>
-<p>Imperfection is a concept invented by William Zeitler to describe the presence or absense of perfect fifths in the scale tones. Any tone in the scale that does not have the perfect fifth above it represented in the scale is an "imperfect" tone. The number of imperfections is a metric that plausibly correlates with the perception of dissonance in a sonority.</p>
+
+<hr/>
+
+
+
+
+<h2>Imperfection</h2>
+<p>Imperfection is a concept invented (so far as I can tell) by William Zeitler, to describe the presence or absense of perfect fifths in the scale tones. Any tone in the scale that does not have the perfect fifth above it represented in the scale is an "imperfect" tone. The number of imperfections is a metric that plausibly correlates with the perception of dissonance in a sonority.</p>
 <p>The only scale that has no imperfections is the 12-tone chromatic scale.</p>
 
 <p>This table differs from the one at <a href="allthescales.org">allthescales.org</a>, because this script does not de-duplicate modes. If an imperfection exists in a scale, it will also exist in all the sibling modes of that scale. Hence the single imperfect tone in the 11-tone scale is found 11 times (in 11 scales that are all modally related), whereas Zeitler only counts it as one.</p>
-<table border="1">
+<table class="table" border="1">
   <thead>
   <tr>
 	<th>number of notes in scale</th>
@@ -297,13 +406,44 @@ foreach ($allscales as $index => $set) {
 ?>
 </table>
 
+
+
+
+<hr/>
+
+
+
 <h3>Truncation</h3>
-<p>A subset of a scale produced by removing notes is known as a "truncation".</p>
+<p>A subset of a scale produced by removing notes is known as a "truncation". The term is usually used in the context of Messaien's Modes of Limited Transposition, where a truncation involves removing notes in a way that preserves its symmetry.</p>
+<p>(todo: find truncated relationships between modes)</p>
+
+
+<hr/>
+
+
+
+<h3>Intrascale Distance</h3>
+<p>Another interesting relationship between two scales is similarity. You can measure how similar two scales are by using an algorithm similar to the Levenshtein Distance; determining how many additions, subtractions, or alterations would be needed to transform one into the other.</p>
+<p>The operations that constitute a unit of distance would be:
+	<ol>
+		<li>Removing one tone from the scale</li>
+		<li>Adding one tone to the scale</li>
+		<li>Transposing one tone up or down a single semitone</li>
+	</ol>
+</p>
+<p>We might guess that two scales that are similar will have a close feeling of sonority, but that's perceptually untrue; the "perceptual colour" of a scale depends very much upon which degrees of the scale are being altered, added, or omitted. Our ears are very sensitive to the difference between major and minor modes, which involve only a semitone shift of the third interval. Similarly, the consonance of a perfect fifth is very different from the dissonance of a diminished fifth, just one semitone below. The same power is weilded by the seventh interval of a scale, which can create quite a different sonority when flattened, because it puts the scale into a Dominant position awaiting resolution.</p>
+<p>By contrast, we can alter the second, fourth and sixth degrees of a scale (often voiced as the 9th, 11th and 13th) with less effect on the listener's expectations.</p>
+
+<p>The L() distance between every scale and every other scale, omitting itself, will produce a graph with (((1490)^2) / 2 - 1490) values... that's 1108560 distances.</p>
+<p>Given a scale, we can generate all the scales with Levenshtein distance <i>n</i> by performing three operations on it: remove a note, add a note, or modify a note by one semitone, done to all the 12 tones, omitting any that don't apply or that produce duplicates or non-scales. If n > 1, then we recurse. The number of scales with L()=1 for any scale will be different depending on the number of tones in the scale and their placement - and whether operations produce duplicates. Precomputing the graph of L() for distance <i>n</i> will be easier than scanning the scales and measuring the L() distance between every scale and every other scale, though since it's a deterministic operation we only need to do that computation once and the results will be static forever.</p>
+<p>So, let's do that <a href="levenshtein.php">here</a>.</p>
+<hr/>
+
 
 
 <?php
 echo '<h3>All Scales</h3>';
-echo '<table border="1">';
+echo '<table class="table" border="1">';
 echo '<tr>';
 echo '<th>Count</th>';
 echo '<th>Index</th>';
