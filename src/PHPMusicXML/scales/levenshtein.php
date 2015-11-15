@@ -1,4 +1,8 @@
 <?php
+ini_set('memory_limit', '128M');
+set_time_limit(0);
+error_reporting(E_ALL);
+ini_set('display_errors', true);
 
 // todo
 // figure out a way to calculate the "edit distance" between two scales.
@@ -32,21 +36,102 @@ XOR
 
 	*/
 
-$scale1 = '110111010010';
-$scale2 = '110101010110';
+// $stats = array();
+
+// $allscales = range(0, 4095);
+$allscales = range(0, 700);
+foreach ($allscales as $index => $set) {
+	if ((1 & $index) == 0) {
+		unset($allscales[$index]);
+	}
+}
+foreach ($allscales as $index => $set) {
+	$allscales[$index] = array();
+	$newset = array();
+	for ($i = 0; $i < 12; $i++) {
+		if ($index & (1 << ($i))) {
+			$newset[] = $i;
+		}
+	}
+	$allscales[$index]['tones'] = $newset;
+}
+$maxinterval = 4;
+foreach ($allscales as $index => $set) {
+	$setsize = count($set['tones']);
+	for ($i = 0; $i < $setsize-1; $i++) {
+		if ($set['tones'][$i+1] - $set['tones'][$i] > $maxinterval) {
+			unset($allscales[$index]);
+		}
+	}
+	if (12 - $set['tones'][$setsize-1] > $maxinterval) {
+		unset($allscales[$index]);
+	}
+}
+
+
+
+$numscales = count($allscales);
+echo $numscales.' scales';
+$gd = imagecreatetruecolor($numscales, $numscales) or die('Cannot Initialize new GD image stream');
+imagecolorallocate($gd, 100,100,100);	
+
+$colors = array(
+	0 => imagecolorallocate($gd, 255, 255, 255),
+	1 => imagecolorallocate($gd, 0, 0, 255),
+	2 => imagecolorallocate($gd, 0, 255, 255),
+	3 => imagecolorallocate($gd, 0, 255, 0),
+	4 => imagecolorallocate($gd, 255, 150, 0),
+	5 => imagecolorallocate($gd, 255, 255, 0),
+	6 => imagecolorallocate($gd, 255, 0, 0),
+);
+print_r($colors);
+
+$x = 0;
+$y = 0;
+foreach ($allscales as $i => $s) {
+	echo '.';
+	flush();
+	$y++;
+	$x = 0;
+	foreach ($allscales as $j => $q) {
+		$x++;
+		$dist = edit_distance($i, $j);
+		imagesetpixel($gd, $x, $y, $colors[$dist]);
+// 		// $stats[$dist]++;
+// 		// if ($y > 100) {break;}
+// 		// echo $x;
+	}
+// 	// echo '<br/>'.$y;
+// 	// if ($y > 100) { break;}
+}
+
+imagetruecolortopalette($gd, false, 255);
+$success = imagepng($gd, "./file.png"); 
+var_dump($success);
+imagedestroy($gd);
+
+echo '<img src="./file.png" />';
+
+// header('Content-Type: image/png');
+// imagepng($gd);
+
+// echo '<table>';
+// foreach($stats as $num => $stat) {
+// 	echo '<tr><td>'.$num.'</td><td>'.$stat.'</td></tr>';
+// }
+// echo '</table>';
+
 
 function edit_distance($scale1, $scale2) {
+
+	return rand(0,6);
+
 	$changes = 0;
-	// find changes that are opposite and adjacent
 	$array1 = bits2array($scale1);
 	$array2 = bits2array($scale2);
-
 	for ($i=0; $i<count($array1); $i++) {
-		if ($array2[$i] != $bit1) {
-			// this is a changed bit
-			if ($array1[$i+1] != $array2[$i+1] && $array1[$i] != $array1[$i+1]) {
-				// there is a change adjacent and it is opposite
-				// flip the bit so we don't count it again
+		if ($array2[$i] != $array1[$i]) {
+			if (($array1[$i+1] != $array2[$i+1]) && ($array1[$i] != $array1[$i+1])) {
 				$array2[$i+1] = $array1[$i+1];
 			}
 			$changes++;

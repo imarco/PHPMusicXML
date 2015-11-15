@@ -51,46 +51,130 @@ $symmetry_sets = array(
 		margin:0 auto;
 		font-family: helvetica;
 	}
+	.scale-player{
+		color:blue;
+		text-decoration: underline;
+		cursor: pointer;
+	}
 	</style>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<!-- polyfill -->
+	<script src="../demo/MIDI.js/inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="../demo/MIDI.js/js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/midi/gm.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/midi/loader.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="../demo/MIDI.js/js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="../demo/MIDI.js/js/util/dom_request_script.js" type="text/javascript"></script>
+
+
+    <script src="../demo/vexflow/vexflow-debug.js"></script>
+
+
+</head>
+<script type="text/javascript">
+
+window.onload = function () {
+	MIDI.loadPlugin({
+		soundfontUrl: "../demo/MIDI.js/examples/soundfont/",
+		instrument: "acoustic_grand_piano",
+		onprogress: function(state, progress) {
+			// console.log(state, progress);
+		},
+		onsuccess: function() {
+			// var delay = 0; // play one note every quarter second
+			// var note = 50; // the MIDI note
+			// var velocity = 127; // how hard the note hits
+			// // play the note
+			// MIDI.setVolume(0, 127);
+			// MIDI.noteOn(0, note, velocity, delay);
+			// MIDI.noteOff(0, note, delay + 0.75);
+		}
+	});
+};
+
+</script>
+<script>
+jQuery(document).ready(function($){
+
+	var notes = [50,51,52,53,54,55,56,57,58,59,60,61];
+	var velocity = 127; // how hard the note hits
+
+	$('body').on('click', '.scale-player', function(){
+		scale = $(this).data('scale');
+
+		MIDI.setVolume(0, 127);
+
+		var d = 0;
+		for (var i = 0; i <= 11; i++) {
+			if (scale & (1 << (i))) {
+				MIDI.noteOn(0, notes[i], velocity, d);
+				MIDI.noteOff(0, notes[i], d + 0.4);
+				d = d + 0.5;
+			}
+		}
+		MIDI.noteOn(0, 62, velocity, d);
+		MIDI.noteOff(0, 62, d + 0.75);
+		d = d + 0.5;
+		for (var i = 11; i >= 0; i--) {
+			if (scale & (1 << (i))) {
+				MIDI.noteOn(0, notes[i], velocity, d);
+				MIDI.noteOff(0, notes[i], d + 0.4);
+				d = d + 0.5;
+			}
+		}
+	});
+});
+</script>
+
+
 </head>
 <body>
 	<h1>Calculating Scales</h1>
 
-	<p>This exploration of scales is based on work by William Zeitler, as published at <a href="http://allthescales.org/">http://allthescales.org/</a>.</p>
+	<p>This exploration of scales is based on work by William Zeitler, as published at <a href="http://allthescales.org/">http://allthescales.org/</a>. In fact much of the material on this page merely repeats Zeitler's findings, presented here along with the source code to generate the scales.</p>
 
-<p>The total number of all possible scales is the "power set" of the twelve-tone chromatic scale. The number of sets in a power set of size <em>n</em> is (2^n).</p>
-<code>2 ^ 12 = 4096</code>
-<p>so there are 4096 different possible subsets of 12 tones.</p>
+	<p>The total number of all possible scales is the "power set" of the twelve-tone chromatic scale. The number of sets in a power set of size <em>n</em> is (2^n).</p>
+	<code>2 ^ 12 = 4096</code>
+	<p>so there are 4096 different possible subsets of 12 tones.</p>
 
-<p>Thanks to the magic of binary math, we can represent these scales by a decimal number, from 0 to 4095. Converted to binary, 0 -> 000000000000 and 4095 -> 111111111111. When represented as bits it reads from right to left - the lowest bit is the root, and each bit going from right to left ascends by one semitone.</p>
-<table class="table" border="1">
-	<tr><th>decimal</th><th>binary</th><th></th></tr>
-	<tr>
-		<td>0</td>
-		<td>000000000000</td>
-		<td>no notes in the scale</td>
-	</tr>
-	<tr>
-		<td>1</td>
-		<td>000000000001</td>
-		<td>just the root tone</td>
-	</tr>
-	<tr>
-		<td>1365</td>
-		<td>010101010101</td>
-		<td>whole tone scale</td>
-	</tr>
-	<tr>
-		<td>2741</td>
-		<td>101010110101</td>
-		<td>major scale</td>
-	</tr>
-	<tr>
-		<td>4095</td>
-		<td>111111111111</td>
-		<td>chromatic scale</td>
-	</tr>
-</table>
+	<p>Thanks to the magic of binary math, we can represent these scales by a decimal number, from 0 to 4095. Converted to binary, 0 -> 000000000000 and 4095 -> 111111111111. When represented as bits it reads from right to left - the lowest bit is the root, and each bit going from right to left ascends by one semitone.</p>
+	<table class="table" border="1">
+		<tr><th>decimal</th><th>binary</th><th></th></tr>
+		<tr>
+			<td>0</td>
+			<td>000000000000</td>
+			<td>no notes in the scale</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>000000000001</td>
+			<td>just the root tone</td>
+		</tr>
+		<tr>
+			<td>1365</td>
+			<td>010101010101</td>
+			<td>whole tone scale</td>
+		</tr>
+		<tr>
+			<td>2741</td>
+			<td>101010110101</td>
+			<td>major scale</td>
+		</tr>
+		<tr>
+			<td>4095</td>
+			<td>111111111111</td>
+			<td>chromatic scale</td>
+		</tr>
+	</table>
 
 <?php
 
@@ -276,7 +360,9 @@ foreach ($modelist as $num => $list) {
 		echo '<tr>';
 		echo '<td>';
 		foreach ($group as $mode) {
+			echo '<a class="scale-player" data-scale="'.$mode.'">';
 			echo $mode;
+			echo '</a>';
 			$name = name($mode);
 			if (!empty($name)) {
 				echo ' (<b>'.$name.'</b>)';
@@ -307,33 +393,57 @@ foreach ($modelist as $num => $list) {
 	<tr>
 		<td>1,2,3,4,5,6,7,8,9,10,11</td>
 		<td>semitone</td>
-		<td><?php echo implode(', ', $symmetry_sets[1]); ?></td>
-
-<!-- 		<td>only the chromatic scale has this symmetry</td>
- -->	</tr>
+		<td>
+		<?php 
+		echo implode(', ', array_map(function($scale){
+			return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+		}, $symmetry_sets[1]));
+		?>
+		</td>
+	</tr>
 	<tr>
 		<td>2,4,6,8,10</td>
 		<td>whole tone</td>
-		<td><?php echo implode(', ', $symmetry_sets[2]); ?></td>
-
-<!-- 		<td>1365 (only the whole tone scale has this symmetry)</td> -->
+		<td>
+		<?php 
+		echo implode(', ', array_map(function($scale){
+			return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+		}, $symmetry_sets[2]));
+		?>
+		</td>
 	</tr>
 	<tr>
 		<td>3,6,9</td>
 		<td>minor thirds</td>
-		<td><?php echo implode(', ', $symmetry_sets[3]); ?></td>
+		<td>
+		<?php 
+		echo implode(', ', array_map(function($scale){
+			return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+		}, $symmetry_sets[3]));
+		?>
+		</td>
 	</tr>
 	<tr>
 		<td>4,8</td>
 		<td>major thirds</td>
-		<td><?php echo implode(', ', $symmetry_sets[4]); ?></td>
-		<!-- <td>0273, 0819, 1911, 2457, 3003</td> -->
+		<td>
+		<?php 
+		echo implode(', ', array_map(function($scale){
+			return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+		}, $symmetry_sets[4]));
+		?>
+		</td>
 	</tr>
 	<tr>
 		<td>6</td>
 		<td>tritones</td>
-		<td><?php echo implode(', ', $symmetry_sets[6]); ?></td>
-		<!-- <td>0325, 0455, 0715, 0845, 0975, 1105, 1235, 1495, 1625, 1885, 2015, 2275, 2405, 2535, 2665, 2795, 3055, 3185, 3315, 3445, 3549, 3575, 3705, 3835, 3965</td> -->
+		<td>
+		<?php 
+		echo implode(', ', array_map(function($scale){
+			return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+		}, $symmetry_sets[6]));
+		?>
+		</td>
 	</tr>
 </table>
 <br/>
@@ -423,7 +533,7 @@ foreach ($modelist as $num => $list) {
 
 
 <h3>Intrascale Distance</h3>
-<p>Another interesting relationship between two scales is similarity. You can measure how similar two scales are by using an algorithm similar to the Levenshtein Distance; determining how many additions, subtractions, or alterations would be needed to transform one into the other.</p>
+<p>Another interesting relationship between two scales is tonal similarity. You can measure how similar two scales are by using their "edit distance"; determining how many additions, subtractions, or alterations would be needed to transform one into the other.</p>
 <p>The operations that constitute a unit of distance would be:
 	<ol>
 		<li>Removing one tone from the scale</li>
@@ -433,9 +543,11 @@ foreach ($modelist as $num => $list) {
 </p>
 <p>We might guess that two scales that are similar will have a close feeling of sonority, but that's perceptually untrue; the "perceptual colour" of a scale depends very much upon which degrees of the scale are being altered, added, or omitted. Our ears are very sensitive to the difference between major and minor modes, which involve only a semitone shift of the third interval. Similarly, the consonance of a perfect fifth is very different from the dissonance of a diminished fifth, just one semitone below. The same power is weilded by the seventh interval of a scale, which can create quite a different sonority when flattened, because it puts the scale into a Dominant position awaiting resolution.</p>
 <p>By contrast, we can alter the second, fourth and sixth degrees of a scale (often voiced as the 9th, 11th and 13th) with less effect on the listener's expectations.</p>
-
-<p>The L() distance between every scale and every other scale, omitting itself, will produce a graph with (((1490)^2) / 2 - 1490) values... that's 1108560 distances.</p>
+<p>Edit distance is bidirectional. If the distance between A -> B is x, the distance from B -> A will also be x.</p>
+<p>The distance between every scale and every other scale, omitting itself, will produce a graph with (((1490)^2) / 2 - 1490) values... that's 1108560 distances.</p>
 <p>Given a scale, we can generate all the scales with Levenshtein distance <i>n</i> by performing three operations on it: remove a note, add a note, or modify a note by one semitone, done to all the 12 tones, omitting any that don't apply or that produce duplicates or non-scales. If n > 1, then we recurse. The number of scales with L()=1 for any scale will be different depending on the number of tones in the scale and their placement - and whether operations produce duplicates. Precomputing the graph of L() for distance <i>n</i> will be easier than scanning the scales and measuring the L() distance between every scale and every other scale, though since it's a deterministic operation we only need to do that computation once and the results will be static forever.</p>
+<p>It's plausible that it would be easy to modulate from one rooted scale to another that has a small distance, just as it is to modulate to a mode of the current scale. A "comfortable modulation distance" would be the shortest path between one rooted scale and another, using scale modification (edit distance) and modal relationship.</p>
+<p>An interesting data set would be to calculate all the proximate scales to a given scale, say at L distance 1 or 2. Also interesting is finding out the distance between named scales, such as the ecclesiatstical and jazz scales.</p>
 <p>So, let's do that <a href="levenshtein.php">here</a>.</p>
 <hr/>
 
@@ -450,6 +562,7 @@ echo '<th>Index</th>';
 echo '<th>Name</th>';
 echo '<th>Tones</th>';
 echo '<th>Bitmask</th>';
+echo '<th>Notation</th>';
 echo '<th>Note Count</th>';
 echo '<th>Modes</th>';
 echo '<th>Symmetry Axes</th>';
@@ -460,7 +573,7 @@ $num = 1;
 foreach ($allscales as $index => $set) {
 	echo '<tr>';
 	echo '<td>'.$num.'</td>';
-	echo '<td>' . str_pad($index, 4, '0', STR_PAD_LEFT) . '</td>';
+	echo '<td><a class="scale-player" data-scale="'.$index.'">' . str_pad($index, 4, '0', STR_PAD_LEFT) . '</a></td>';
 	echo '<td>' . name($index) . '</td>';
 
 	echo '<td>';
@@ -468,8 +581,46 @@ foreach ($allscales as $index => $set) {
 	echo '</td>';
 
 	echo '<td>' . str_pad(decbin($index), 12, '0', STR_PAD_LEFT).'</td>';
+
+	echo '<td>';
+	echo '<canvas id="vf'.$index.'" width="500" height="100"></canvas>';
+echo '<script>
+var canvas = $("#vf' . $index . '")[0];
+var renderer = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.CANVAS);
+var ctx = renderer.getContext();
+var stave = new Vex.Flow.Stave(10, 0, 450);
+stave.addClef("treble").setContext(ctx).draw();
+  var notes = [
+ ';
+foreach($set['tones'] as $tone) {
+	$pitch = tone2pitch($tone);
+    echo 'new Vex.Flow.StaveNote({ keys: ["' . $pitch['letter'] . '"], duration: "w" })';
+    if (!is_null($pitch['accidental'])) {
+    	echo '.addAccidental(0, new Vex.Flow.Accidental("'.$pitch['accidental'].'"))';
+    }
+    echo ',';
+    echo "\n";
+}
+echo '
+  ];
+  var voice = new Vex.Flow.Voice({
+    num_beats: '.count($set['tones']).',
+    beat_value: 1,
+    resolution: Vex.Flow.RESOLUTION
+  });
+  voice.addTickables(notes);
+  var formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 400);
+  voice.draw(ctx, stave);
+</script>
+';
+	echo '</td>';
+
 	echo '<td style="text-align:center;">'. count($set['tones']) .'</td>';
-	echo '<td>' . implode(',', $set['modes']) . '</td>';
+	echo '<td>';
+	echo implode(', ', array_map(function($scale){
+		return '<a class="scale-player" data-scale="'.$scale.'">'.$scale.'</a>';
+	}, $set['modes'])); 
+	echo '</td>';
 	echo '<td>' . implode(',', $set['symmetries']) . '</td>';
 	echo '<td>' . implode(',', $set['imperfections']) . '</td>';
 	echo '</tr>';
@@ -477,10 +628,23 @@ foreach ($allscales as $index => $set) {
 }
 echo '</table>';
 
-
-
-
-
+function tone2pitch($tone) {
+	$pitches = array(
+		0 => array('letter' => 'c/4', 'accidental' => null),
+		1 => array('letter' => 'c#/4', 'accidental' => '#'),
+		2 => array('letter' => 'd/4', 'accidental' => null),
+		3 => array('letter' => 'd#/4', 'accidental' => '#'),
+		4 => array('letter' => 'e/4', 'accidental' => null),
+		5 => array('letter' => 'f/4', 'accidental' => null),
+		6 => array('letter' => 'f#/4', 'accidental' => '#'),
+		7 => array('letter' => 'g/4', 'accidental' => null),
+		8 => array('letter' => 'g#/4', 'accidental' => '#'),
+		9 => array('letter' => 'a/4', 'accidental' => null),
+		10 => array('letter' => 'a#/4', 'accidental' => '#'),
+		11 => array('letter' => 'b/4', 'accidental' => null),
+	);
+	return $pitches[$tone];
+}
 
 
 echo '<br/><br/>';
@@ -560,10 +724,10 @@ function name($index) {
 		1387 => 'locrian',
 		1389 => 'half diminished',
 		1451 => 'phrygian',
-		1453 => 'aeolian',
+		1453 => array('aeolian', 'natural minor'),
 		1709 => 'dorian',
 		1717 => 'mixolydian',
-		2741 => 'major,ionian',
+		2741 => array('major' ,'ionian'),
 		2773 => 'lydian',
 		2509 => 'hungarian minor',
 		2901 => 'lydian augmented',
@@ -571,17 +735,19 @@ function name($index) {
 		2475 => 'minor neapolitan',
 		3669 => 'prometheus',
 		1235 => 'tritone scale',
-		1755 => 'octatonic, second mode of limited transposition',
+		1755 => array('octatonic', 'second mode of limited transposition'),
 		3549 => 'third mode of limited transposition',
 		2535 => 'fourth mode of limited transposition',
 		2275 => 'fifth mode of limited transposition',
 		3445 => 'sixth mode of limited transposition',
 		3055 => 'seventh mode of limited transposition',
-		3501 => 'natural minor',
 		3765 => 'bebop dominant',
 		4095 => 'chromatic 12-tone',
 	);
 	if (isset($names[$index])) {
+		if (is_array($names[$index])) {
+			return implode(', ',$names[$index]);
+		}
 		return $names[$index];
 	}
 	return '';
