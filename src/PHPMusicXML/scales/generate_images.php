@@ -97,22 +97,8 @@ $allscales = range(0, 4095);
 		?>
 
 <?php
-echo '<h3>All Scales</h3>';
-echo '<table class="table" border="1">';
-echo '<tr>';
-echo '<th>Notation</th>';
-echo '<th>Note Count</th>';
-echo '<th>Modes</th>';
-echo '<th>Symmetry Axes</th>';
-echo '<th>Imperfections</th>';
-echo '</tr>';
-
-$num = 1;
 foreach ($allscales as $index => $set) {
-	echo '<tr>';
-	echo '<td>';
-	
-	if ($num < 5000) {
+
 		echo '<canvas id="vf'.$index.'" width="500" height="100"></canvas>';
 		echo '<script>
 		var canvas = $("#vf' . $index . '")[0];
@@ -159,12 +145,7 @@ foreach ($allscales as $index => $set) {
 			});
 		</script>
 		';
-	}
-	echo '</td>';
-	echo '</tr>';
-	$num++;
 }
-echo '</table>';
 
 function tone2pitch($tone) {
 	$pitches = array(
@@ -185,7 +166,6 @@ function tone2pitch($tone) {
 }
 
 
-echo '<br/><br/>';
 ?>
 </body>
 </html>

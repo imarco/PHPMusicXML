@@ -510,7 +510,6 @@ echo '<th>Name</th>';
 echo '<th>Tones</th>';
 echo '<th>Bitmask</th>';
 echo '<th>Notation</th>';
-echo '<th>Note Count</th>';
 echo '<th>Modes</th>';
 echo '<th>Symmetry Axes</th>';
 echo '<th>Imperfections</th>';
@@ -529,48 +528,10 @@ foreach ($allscales as $index => $set) {
 
 	echo '<td>' . str_pad(decbin($index), 12, '0', STR_PAD_LEFT).'</td>';
 
-	echo '<td><img src="images/' . $index . '.png"/></td>';
+	echo '<td><img src="images/' . $index . '.png" style="width:300px;height:60px;" /></td>';
 
 	echo '<td>';
-?>
-    <canvas id="myCanvas" width="578" height="200"></canvas>
-    <script>
-
-      var canvas = document.getElementById('myCanvas');
-      var context = canvas.getContext('2d');
-      var centerX = canvas.width / 2;
-      var centerY = canvas.height / 2;
-      var radius = 70;
-
-      context.beginPath();
-      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.lineWidth = 1;
-      context.strokeStyle = '#000000';
-      context.stroke();
-
-    var ang;
-    var num;
-    context.font = radius*0.15 + "px arial";
-    context.textBaseline="middle";
-    context.textAlign="center";
-    for(num= 1; num < 13; num++){
-        ang = num * Math.PI / 6;
-        context.rotate(ang);
-        context.translate(0, -radius*1.15);
-        context.rotate(-ang);
-        context.fillText(num.toString(), centerX, centerY);
-        context.rotate(ang);
-        context.translate(0, radius*1.15);
-        context.rotate(-ang);
-    }  
-      
-    </script>
-    
-<?php
-	echo '</td>';
-	echo '<td style="text-align:center;">'. count($set['tones']) .'</td>';
-	echo '<td>';
-	echo implode('<br/>', $set['modes']);
+	echo implode(', ', $set['modes']);
 	echo '</td>';
 	echo '<td>' . implode(',', $set['symmetries']) . '</td>';
 	echo '<td>' . implode(',', $set['imperfections']) . '</td>';
